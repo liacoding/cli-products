@@ -9,8 +9,14 @@ export function readDatabase(filename) {
   let newArray = [];
 
   for(let i = 0; i < arr.length; i++) {
-    const obj = JSON.parse(arr[i]);
-    newArray.push(obj);
+    try {
+      const obj = JSON.parse(arr[i]);
+      newArray.push(obj);
+    }
+    catch(e) {
+      
+    }
+
   }
 
   return newArray;

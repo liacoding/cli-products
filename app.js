@@ -18,20 +18,54 @@ const require = createRequire(import.meta.url);
 var prompt = require('prompt');
 
 import { getProductById, getAllProducts } from "./operations/read.js";
+import { removeProductById } from './operations/delete.js';
+import { createProduct } from './operations/create.js';
+
+let fake = {
+  price: 500,
+  sku: 66554,
+  name: "Widget",
+  quantity: 5000,
+  description: "Purple widget; all the kids will love them",
+  id: 6
+}
 
 prompt.start();
 
-console.log("Enter A to see all products; enter I to see individual product details");
+console.log("Pick from the following operations:");
+console.log("A: list all products");
+console.log("I: find product by id")
+console.log("D: delete product by ID");
+console.log("C: create a new product");
 
 prompt.get(['operation'], function (err, result) {
   switch(result.operation) {
     case "A":
       console.log(getAllProducts())
+      break;
     case "I":
       prompt.get(['id'], function (err, result) {
         var product = getProductById(result.id);
         console.log(product);
       });
+      break;
+    case "D":
+      prompt.get(['id'], function (err, result) {
+        var product = removeProductById(result.id);
+        console.log(product);
+      });
+      break;
+    case "C":
+      prompt.get(['id', 'price', 'sku', 'name', 'quantity', 'description'], function (err, result) {
+        let product = {
+          // use the user input to create this new Product object that we are going to pass into the createProduct()
+        };
+
+
+        var result = createProduct(product);
+        console.log(product);
+      });
+      break;
   }
 });
 
