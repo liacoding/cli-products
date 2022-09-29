@@ -1,5 +1,19 @@
-import { readDatabase } from '../data/import_db.js';
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url);
 
+import { readDatabase } from '../data/import_db.js';
+const { Sequelize } = require('sequelize');
+
+// const dbconfig = require('../data/db.config');
+import { dbconfig } from '../data/db.config.js';
+
+// make a Sequelize instance
+const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
+    HOST: dbconfig.HOST,
+    dialect: dbconfig.dialect
+})
+
+// change to connect to actual database to get all products
 let products = readDatabase("./data/db.txt");
 
 // read info on ONE product, by its ID
@@ -21,6 +35,13 @@ export function getProductById(id) {
 
 
 // read info on ALL products
-export function getAllProducts() {
+export async function getAllProducts() {
+    try {
+        const [results, metadata] = await sequelize.query("SELECT * FROM products;")
+        console.log(results);
+    }
+    catch(error) {
+        console.log("error connecting to database: " + error);
+    }
     return products;
 }

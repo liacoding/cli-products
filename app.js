@@ -20,15 +20,8 @@ var prompt = require('prompt');
 import { getProductById, getAllProducts } from "./operations/read.js";
 import { removeProductById } from './operations/delete.js';
 import { createProduct } from './operations/create.js';
-
-let fake = {
-  price: 500,
-  sku: 66554,
-  name: "Widget",
-  quantity: 5000,
-  description: "Purple widget; all the kids will love them",
-  id: 6
-}
+import { updateProductById } from './operations/update.js';
+import { updateDatabase } from './data/update_db.js';
 
 prompt.start();
 
@@ -37,6 +30,7 @@ console.log("A: list all products");
 console.log("I: find product by id")
 console.log("D: delete product by ID");
 console.log("C: create a new product");
+console.log("U: update a product by id");
 
 prompt.get(['operation'], function (err, result) {
   switch(result.operation) {
@@ -51,21 +45,41 @@ prompt.get(['operation'], function (err, result) {
       break;
     case "D":
       prompt.get(['id'], function (err, result) {
-        var product = removeProductById(result.id);
-        console.log(product);
+        // remove product from in-memory array
+        var updatedProducts = removeProductById(result.id);
+        // update the database
+        updateDatabase(updatedProducts);
+
+        console.log(updatedProducts);
       });
       break;
-    case "C":
-      prompt.get(['id', 'price', 'sku', 'name', 'quantity', 'description'], function (err, result) {
-        let product = {
-          // use the user input to create this new Product object that we are going to pass into the createProduct()
+      case "C":
+        prompt.get(['price', 'sku', 'name', 'quantity', 'description'], function (err, result) {
+          let product = {
+                 
+                 price : Number(result.price),
+                 sku : Number(result.sku),
+                 name : result.name,
+                 quantity : Number(result.quantity),
+                 description:result.description
+             // use the user input to create this new Product object that we are going to pass into the createProduct()
         };
-
-
-        var result = createProduct(product);
-        console.log(product);
-      });
-      break;
+  
+         var result = createProduct(product);
+          console.log(product);
+        });
+        break;
+      
+      case "U":
+        let updatedProducts = [];
+        prompt.get(['id'], function (err, result) {
+        
+        updatedProducts = updateProductById(result.id);
+        
+        });
+        updateDatabase(updatedProducts);
+        console.log(updatedProducts);
+        break;
   }
 });
 
