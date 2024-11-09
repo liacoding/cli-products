@@ -3,12 +3,9 @@ purpose of our application:
 Allow a user to create, read, edit and delete products from a collection of products
 We will prompt a user for the desired operation, and then perform it
 
-what "concerns" will we have?
-
 1. Data access 
 2. UI concerns (prompting user for input; presenting output)
 3. Create/Edit/Delete data
-
 
 */
 import { createRequire } from 'module'

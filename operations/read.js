@@ -10,8 +10,8 @@ import { dbconfig } from '../data/db.config.js';
 // make a Sequelize instance
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
     HOST: dbconfig.HOST,
-    dialect: dbconfig.dialect
-})
+    dialect: dbconfig.dialect,
+});
 
 // change to connect to actual database to get all products
 let products = readDatabase("./data/db.txt");
